@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
+const couSem = require('./courseInSemester.model.js').Schema
 
-const studentSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema(
+{
     name: String,
     email: String,
-    password: { 
-        type: String,
+    password: {
+        type: String, 
         default: '123456'
     },
     mssv: { 
         type: String, 
-        require: false
+        require: true, 
+        unique: true
+    },
+    role: {
+        type: String,
+        default: 'student'
+    },
+    image: { type: String, required: false },
+    passwordChanged: {
+        type: Boolean,
+        default: false
     },
     private_info:{
         ngaySinh: Date,
@@ -24,15 +36,6 @@ const studentSchema = new mongoose.Schema({
         emailTruongCap: String,
         emailLienLac: String,
     },
-    role: {
-        type: String,
-        default: 'student'
-    },
-    
-    passwordChanged: {
-        type: Boolean,
-        default: false
-    },
       // Training information
     training_info:{
         namNhapHoc: String,
@@ -46,7 +49,15 @@ const studentSchema = new mongoose.Schema({
         heDaoTao: String,
         nganhDaoTao: String,
         trangThaiSinhVien: String,
-    }}, 
+        
+    },
+    courseEnroll: {
+        type: [couSem],
+    },
+    courseReg: {
+        type: [couSem]
+    }
+}, 
     { 
         timestamps: true // Enable createdAt and updatedAt fields
     }

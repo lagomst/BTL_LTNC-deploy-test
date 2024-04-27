@@ -1,6 +1,5 @@
 const express = require('express');
 const controlPanelController = require('../../controllers/admin/control_panel.controller');
-const authenticate = require('../../middlewares/authenticate');
 
 const router = express.Router();
 

@@ -6,8 +6,7 @@ const teacherController = require('../../controllers/admin/teacher.controller');
 
 router.get('/', teacherController.getAllTeachers);
 router.post('/add', teacherController.addTeacher);
-router.put('/:msgv', teacherController.updateTeacher);
-router.delete('/:msgv', teacherController.deleteTeacher);
-router.get('/:msgv', teacherController.findTeacherByMsgv);
+router.put('/update', teacherController.updateTeacher);
+router.delete('/delete', teacherController.deleteTeacher);
 
 module.exports = router;

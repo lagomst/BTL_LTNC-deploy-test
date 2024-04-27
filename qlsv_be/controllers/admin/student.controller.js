@@ -1,6 +1,7 @@
 const Student = require('../../models/student.model');
 const { generateUniqueMssv } = require('../../helpers/generateMssv');
 
+
 // Get all students
 const getAllStudents = async (req, res) => {
     try {
@@ -43,7 +44,7 @@ const addStudent = async (req, res) => {
 
 // Delete a student
 const deleteStudent = async (req, res) => {
-    const { mssv } = req.params;
+    const { mssv } = req.body;
 
     try {
         const deletedStudent = await Student.findOneAndDelete({ mssv: mssv });
@@ -65,11 +66,12 @@ const updateStudent = async (req, res) => {
             email: req.body.email,
             password: req.body.password,
             mssv: req.body.mssv,
+            image: req.body.image,
             private_info: req.body.private_info,
             training_info: req.body.training_info
         }
 
-        const student = await Student.findOneAndUpdate({ mssv: req.params.mssv }, studentUpdated, { new: true });
+        const student = await Student.findOneAndUpdate({ mssv: req.body.mssv }, studentUpdated, { new: true });
 
         if (!student) {
             return res.status(404).send();
@@ -83,7 +85,7 @@ const updateStudent = async (req, res) => {
 
 // Find a student by mssv
 const findStudentByMssv = async (req, res) => {
-    const { mssv } = req.params;
+    const { mssv } = req.body;
 
     try {
         const student = await Student.findOne({ mssv: mssv });
@@ -96,6 +98,7 @@ const findStudentByMssv = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 module.exports = {
     getAllStudents,

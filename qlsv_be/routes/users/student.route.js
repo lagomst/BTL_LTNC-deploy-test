@@ -1,15 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authenticate = require('../../middlewares/authenticate');
-const studentController = require('../../controllers/users/student.controller');
+const studentController = require('../../controllers/users/student/student.controller');
 const studentDashboard = require('./studentdashboard.route');
 const { body } = require('express-validator');
-
-// register route
-router.post('/changePassword', [
-    body('email').isEmail().withMessage('Invalid email address'),
-    body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
-], studentController.changePassword);
+const authenticate = require('../../middlewares/authenticate');
 
 // login route
 router.post('/login', [
@@ -17,7 +11,14 @@ router.post('/login', [
     body('password').notEmpty().withMessage('Password is required'),
 ], studentController.login);
 
+// change password route
+router.post('/changepassword', [
+    body('email').isEmail().withMessage('Invalid email address'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+], studentController.changePassword);
+
 router.use('/dashboard', authenticate, studentDashboard);
+
 
 
 module.exports = router;

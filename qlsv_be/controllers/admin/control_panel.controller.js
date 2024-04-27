@@ -19,11 +19,22 @@ const addCourse = async (req, res) => {
     const newCourse = new Course({
         semester: req.body.semester,
         courseCode: req.body.courseCode,
+        courseName: req.body.name,
+        msgv: req.body.msgv,
+        credit: req.body.credit,
         scheduleDay: req.body.scheduleDay,
         scheduleTime: req.body.scheduleTime,
+        scheduleWeek: req.body.scheduleWeek,
+        sotinhchi: req.body.sotinhchi,
+        tinhchihocphi: req.body.tinhchihocphi,
+        STT: req.body.STT,
         classroom: req.body.classroom,
-        studentCount: req.body.studentCount,
-        instructorName: req.body.instructorName
+        instructorName: req.body.instructorName,
+        studentEnroll: req.body.studentEnroll,
+        midterm: req.body.midterm,
+        final: req.body.final,
+        soluong: req.body.soluong,
+        bangdiem: req.body.bangdiem,
    });
     await newCourse.save();
     res.status(201).json(newCourse);
@@ -36,16 +47,26 @@ const addCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
   try {
     const courseUpdate = {
-      semester: req.body.semester,
-      courseCode: req.body.courseCode,
-      scheduleDay: req.body.scheduleDay,
-      scheduleTime: req.body.scheduleTime,
-      classroom: req.body.classroom,
-      studentCount: req.body.studentCount,
-      instructorName: req.body.instructorName
+        semester: req.body.semester,
+        courseCode: req.body.courseCode,
+        courseName: req.body.name,
+        credit: req.body.credit,
+        scheduleDay: req.body.scheduleDay,
+        scheduleTime: req.body.scheduleTime,
+        scheduleWeek: req.body.scheduleWeek,
+        sotinhchi: req.body.sotinhchi,
+        tinhchihocphi: req.body.tinhchihocphi,
+        STT: req.body.STT,
+        classroom: req.body.classroom,
+        instructorName: req.body.instructorName,
+        studentEnroll: req.body.studentEnroll,
+        midterm: req.body.midterm,
+        final: req.body.final,
+        soluong: req.body.soluong,
+        bangdiem: req.body.bangdiem,
     };
 
-    const course = await Course.findOneAndUpdate({ courseCode: req.params.courseCode }, courseUpdate, { new: true });
+    const course = await Course.findOneAndUpdate({ courseCode: req.body.courseCode }, courseUpdate, { new: true });
 
     if (!course) {
       return res.status(404).send();
@@ -61,7 +82,7 @@ const updateCourse = async (req, res) => {
 // Delete a course
 const deleteCourse = async (req, res) => {
   try {
-      const { courseCode } = req.params; 
+      const { courseCode } = req.body; 
       const deletedCourse = await Course.findOneAndDelete({ courseCode: courseCode });
       
       if (!deletedCourse) {

@@ -18,7 +18,7 @@ function Login(props) {
         if (response.message === "Login successful") {
           setErrorMsg(null);
           setSuccessMsg("Login successful!");
-          navigate('/student/dashboard');
+          navigate('/admin/dashboard');
         } else {
           setErrorMsg(response.message);
           setSuccessMsg(null);

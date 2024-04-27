@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const teacherModel = require('../../models/teacher.model');
+const studentModel = require('../../../models/student.model');
 
 const login = async (req, res) => {
     const errors = validationResult(req);
@@ -11,13 +11,13 @@ const login = async (req, res) => {
 
     const { email, password} = req.body;
     try {
-        const teacher = await teacherModel.findOne({ email: email });
+        const student = await studentModel.findOne({ email: email });
          // Check if the default password is being used and if the password has not been changed yet
-        if (!teacher || teacher.role !== 'teacher') {
+        if (!student || student.role !== 'student') {
             return res.status(404).json({ message: "Invalid credentials or role"});
         }
         
-        if (teacher.password === '123456' && !teacher.passwordChanged) {
+        if (student.password === '123456' && !student.passwordChanged) {
             // Respond with an instruction to change the password
             return res.status(200).json({
             message: "Default password in use. Password change required.",
@@ -25,12 +25,17 @@ const login = async (req, res) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(password, teacher.password);
+        const isMatch = await bcrypt.compare(password, student.password);
         if (!isMatch) {
             return res.status(401).json({ message: "Incorrect password" });
         }
 
-        const token = jwt.sign({ email: teacher.email, role: teacher.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ 
+            email: student.email, 
+            mssv: student.mssv, 
+            role: student.role 
+        }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        
         res.json({ message: "Login successful", token: token });
     } catch (err) {
         res.status(500).json({ message: "Login error", error: err.message });
@@ -38,32 +43,31 @@ const login = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-    const { email, newPassword } = req.body;
-    let teacher;
+    const { email, password } = req.body;
     
     try {
-        const teacher = await teacherModel.findOne({ email });
-        if (!teacher) {
-            return res.status(404).json({ message: "Teacher not found." });
+        const student = await studentModel.findOne({ email });
+        if (!student) {
+            return res.status(404).json({ message: "Student not found." });
         }
 
         // Check if the password has already been changed
-        if (teacher.passwordChanged) {
+        if (student.passwordChanged) {
             return res.status(403).json({ message: "Password has already been changed." });
         }
 
         // Check if the new password is the default password
-        if (newPassword === '123456') {
+        if (password === '123456') {
             return res.status(400).json({ message: "Invalid password. Please choose a different password." });
         }
 
-        // Hash the new password and update the teacher record
+        // Hash the new password and update the student record
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
         
-        teacher.password = hashedPassword;
-        teacher.passwordChanged = true;
-        await teacher.save();
+        student.password = hashedPassword;
+        student.passwordChanged = true;
+        await student.save();
 
         res.status(200).json({ message: "Password changed successfully." });
 

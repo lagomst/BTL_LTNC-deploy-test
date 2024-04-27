@@ -16,7 +16,7 @@ const addTeacher = async (req, res) => {
         const { name, email, password, private_info, training_info } = req.body;
 
         // Generate new mssv
-        let mssv = await generateUniqueMsgv();
+        let msgv = await generateUniqueMsgv();
 
         // Check if email is already taken
         const existingEmail = await Teacher.findOne({ email: email });
@@ -28,7 +28,7 @@ const addTeacher = async (req, res) => {
             name,
             email,
             password,
-            mssv,
+            msgv,
             private_info,
             training_info
         });
@@ -40,7 +40,7 @@ const addTeacher = async (req, res) => {
     }
 };
 const deleteTeacher = async (req, res) => {
-    const { msgv } = req.params;
+    const { msgv } = req.body;
 
     try {
         const deletedTeacher = await Teacher.findOneAndDelete({ msgv: msgv });
@@ -64,7 +64,7 @@ const updateTeacher = async (req, res) => {
             contact_info: req.body.contact_info
         }
 
-        const teacher = await Teacher.findOneAndUpdate({ msgv: req.params.msgv }, teacherUpdated, { new: true });
+        const teacher = await Teacher.findOneAndUpdate({ msgv: req.body.msgv }, teacherUpdated, { new: true });
 
         if (!teacher) {
             return res.status(404).send();
@@ -78,10 +78,10 @@ const updateTeacher = async (req, res) => {
 
 // Find a student by mssv
 const findTeacherByMsgv = async (req, res) => {
-    const { mssv } = req.params;
+    const { msgv } = req.body;
 
     try {
-        const teacher = await Teacher.findOne({ mssv: mssv });
+        const teacher = await Teacher.findOne({ mssv: msgv });
         if (!teacher) {
             return res.status(404).json({ message: "Teacher not found." });
         }
