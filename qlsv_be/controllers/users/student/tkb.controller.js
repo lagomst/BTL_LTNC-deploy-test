@@ -1,4 +1,5 @@
 const student = require("../../../models/student.model");
+const course = require("../../../models/course.model");
 
 // Get all tkb of all courseEnrolled
 const getTKB = async (req, res) => {
@@ -15,7 +16,7 @@ const getTKB = async (req, res) => {
             //Left outer join with course model
             //and store result in tkb array
             {$lookup: {
-                from: 'courses',
+                from: course.collection.collectionName,
                 localField: "courseCode",
                 foreignField: "courseCode",
                 as: "tkb",

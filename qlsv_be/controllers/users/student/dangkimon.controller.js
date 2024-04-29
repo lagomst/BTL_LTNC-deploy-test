@@ -18,6 +18,20 @@ const viewAvailableCourse = async (req, res) => {
 }
 }
 
+const viewCourseReg = async (req, res) => {
+  const {mssv} = req.user
+  try {
+    const stu = await student.findOne({"mssv": mssv});
+    const courseRet = student.courseReg
+    if (!courseRet) {
+      return res.status(404).send();
+    }
+    res.json(courseRet);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+}
+
 //Add a course registered
 const addCourseReg = async (req, res) => {
   const {courseCode} = req.params
@@ -131,6 +145,7 @@ const confirmReg = async (req, res) => {
 
 module.exports = {
     viewAvailableCourse,
+    viewCourseReg,
     addCourseReg,
     deleteCourseReg,
     deleteAllCourseReg,

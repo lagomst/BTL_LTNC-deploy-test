@@ -10,5 +10,7 @@ router.post('/login', [
     body('password').notEmpty().withMessage('Password is required')
 ], adminController.login);
 
+//router.post('/addAdmin', adminController.addAdmin)
+
 router.use('/dashboard', authenticate, require('./dashboard.route'));
 module.exports = router;

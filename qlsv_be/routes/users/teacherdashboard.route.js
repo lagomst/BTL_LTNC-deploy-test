@@ -1,37 +1,34 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-
 const thongtinGiangVien = require('../../controllers/users/teacher/thongtingv.controller');
-const bangdieukhien = require('../../controllers/users/teacher/bangdieukhien.controller');
-const khoahoc = require('../../controllers/users/teacher/KhoaHoc.controller');
 const SinhVien = require('../../controllers/users/teacher/SinhVien.controller');
-router.use('/thongtingiangvien',thongtinGiangVien.dashboard);
 
-
-router.get('/bangdieukhien', bangdieukhien.dashboard);
-router.get('/bangdieukhien/:courseCode', bangdieukhien.viewStudentEnrollCourse);
-router.put('/bangdieukhien/updateGrade', bangdieukhien.updateGradeforStudent)
-
-//router.use('/khoahoc',khoahoc.dashboard);
-router.use('/SinhVien',SinhVien.dashboard);
-
-// Set up storage for file uploads
+const multer = require('multer');
+const path = require('path'); //Upload image
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, 'lesson_uploads/') // Store lesson files in 'lesson_uploads' folder
-  },
-  filename: function(req, file, cb) {
-    // Append the upload date and the original file extension to the original name
-    cb(null, file.originalname.split('.')[0] + '-' + Date.now() + path.extname(file.originalname))
-  }
+    destination: function(req, file, cb) {
+      cb(null, 'uploads/')  // Store files in the 'uploads' folder
+    },
+    filename: function(req, file, cb) {
+      cb(null, file.fieldname + '-gv-' + Date.now() + path.extname(file.originalname))  // Create a unique file name
+    }
 });
 
 // Create the upload middleware
 const upload = multer({ storage: storage });
 
-router.post('/bangdieukhien/khoahoc/:courseCode', upload.single('lessonFile'), khoahoc.updateLesson);
-router.post('/thongtingiangvien/changePic', upload.single('image'), thongtinGiangVien.updatePicture);
+const bangdieukhienRoute = require('./bangdieukhien.route')
+
+router.get('/thongtingiangvien',thongtinGiangVien.dashboard);
+router.put('/thongtingiangvien',thongtinGiangVien.updateTeacher);
+router.use('/SinhVien',SinhVien.dashboard);
+router.post('/thongtingiangvien/updatePicture', upload.single('image'), thongtinGiangVien.updatePicture);
+
+
+//use route
+router.use('/bangdieukhien', bangdieukhienRoute)
+
+
+
 
 module.exports = router;

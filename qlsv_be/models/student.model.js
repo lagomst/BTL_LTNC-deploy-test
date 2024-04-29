@@ -7,7 +7,7 @@ const studentSchema = new mongoose.Schema(
     email: String,
     password: {
         type: String, 
-        default: '123456'
+        default: '123456',
     },
     mssv: { 
         type: String, 
@@ -21,7 +21,7 @@ const studentSchema = new mongoose.Schema(
     image: { type: String, required: false },
     passwordChanged: {
         type: Boolean,
-        default: false
+        default: false,
     },
     private_info:{
         ngaySinh: Date,

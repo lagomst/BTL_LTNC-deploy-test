@@ -31,7 +31,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ email: teacher.email, role: teacher.role, msgv: teacher.msgv }, process.env.JWT_SECRET, { expiresIn: '1d' });
-        res.json({ message: "Login successful", token: token });
+        res.json({ message: "Login successful", token: token, teacher: teacher });
     } catch (err) {
         res.status(500).json({ message: "Login error", error: err.message });
     }

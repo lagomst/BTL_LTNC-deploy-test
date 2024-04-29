@@ -8,10 +8,6 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         default: '123456'
     },
-    image: {
-        type: String,
-        default: 'default.jpg'
-    },
     msgv: {
         type: String,
         require: true,
@@ -21,6 +17,7 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         default: 'teacher'
     },
+    image: { type: String, required: false },
     private_info: {
         ngaySinh: Date, 
         gioiTinh: String,
@@ -34,7 +31,7 @@ const teacherSchema = new mongoose.Schema({
         sodienthoai: Number,
         emailtruongcap: String,
         emaillienlac: String 
-    }
+    },
 });
 
 const teacherModel = mongoose.model('teacher', teacherSchema);

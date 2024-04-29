@@ -15,7 +15,7 @@ const getAllStudents = async (req, res) => {
 // Add a new student
 const addStudent = async (req, res) => {
     try {
-        const { name, email, password, private_info, training_info } = req.body;
+        const { name, email, private_info, training_info } = req.body;
 
         // Generate new mssv
         let mssv = await generateUniqueMssv();
@@ -29,7 +29,7 @@ const addStudent = async (req, res) => {
         const newStudent = new Student({
             name,
             email,
-            password,
+            "password": "123456",
             mssv,
             private_info,
             training_info
@@ -44,7 +44,7 @@ const addStudent = async (req, res) => {
 
 // Delete a student
 const deleteStudent = async (req, res) => {
-    const { mssv } = req.body;
+    const { mssv } = req.params;
 
     try {
         const deletedStudent = await Student.findOneAndDelete({ mssv: mssv });
@@ -68,10 +68,12 @@ const updateStudent = async (req, res) => {
             mssv: req.body.mssv,
             image: req.body.image,
             private_info: req.body.private_info,
-            training_info: req.body.training_info
+            training_info: req.body.training_info,
+            courseReg: req.body.courseReg,
+            courseEnroll: req.body.courseEnroll
         }
 
-        const student = await Student.findOneAndUpdate({ mssv: req.body.mssv }, studentUpdated, { new: true });
+        const student = await Student.findOneAndUpdate({ mssv: req.params.mssv }, studentUpdated, { new: true });
 
         if (!student) {
             return res.status(404).send();
@@ -85,7 +87,7 @@ const updateStudent = async (req, res) => {
 
 // Find a student by mssv
 const findStudentByMssv = async (req, res) => {
-    const { mssv } = req.body;
+    const { mssv } = req.params;
 
     try {
         const student = await Student.findOne({ mssv: mssv });

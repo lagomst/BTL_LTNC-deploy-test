@@ -1,4 +1,5 @@
 const student = require("../../../models/student.model");
+const course = require("../../../models/course.model")
 
 // Get all lich thi of all courseEnrolled
 const getAllLichThi = async (req, res) => {
@@ -15,7 +16,7 @@ const getAllLichThi = async (req, res) => {
             //Left outer join with course model
             //and store result in lichthi array
             {$lookup: {
-                from: 'courses',
+                from: course.collection.collectionName,
                 localField: "courseCode",
                 foreignField: "courseCode",
                 as: "lichthi",

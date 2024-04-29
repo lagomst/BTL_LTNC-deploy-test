@@ -23,8 +23,8 @@ router.post('/upload/:mssv', upload.single('image'), studentController.updateStu
 
 router.get('/', studentController.getAllStudents);
 router.post('/add', studentController.addStudent);
-router.put('/update', studentController.updateStudent);
-router.delete('/delete', studentController.deleteStudent);
-router.get('/find', studentController.findStudentByMssv);
+router.put('/:mssv', studentController.updateStudent);
+router.delete('/:mssv', studentController.deleteStudent);
+router.get('/:mssv', studentController.findStudentByMssv);
 
 module.exports = router;
