@@ -8,28 +8,66 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Card from 'react-bootstrap/Card';
 import { Table, Button, Modal, Form, Row, Col, Tab, ListGroup } from 'react-bootstrap';
 
-import StudentHeader from '../../components/header_footer/CourseHeader';
+import CourseHeader from '../../components/header_footer/CourseHeader';
 import Footer from '../../components/header_footer/Footer';
 
 function MyCourse() {
+  const [mycourses, setMycourses] = useState([
+    {
+      'courseCode': 'COxxxx',
+      'semester': '1',
+      'credit': '50',
+      'instructorName': 'Tên giảng viên',
+      'msgv': '1234567',
+    }
+  ])
+  
+  // Lấy JWT từ Session Storage
+  const jwtToken = sessionStorage.getItem('jwtToken');
+  // Gửi yêu cầu GET với JWT trong header
+  const getData = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/student/dashboard/khoahoc", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${jwtToken}`, // Include the token in the request header
+          "Content-Type": "application/json",
+        },
+      });
+      if (response.status === 200) {
+        const result = await response.json();
+        console.log("My course:", result);
+
+        setMycourses(result);
+      }
+      else {
+        console.error("Failed to get my course");
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <>
-      <StudentHeader />
+      <CourseHeader />
       <div style={{ margin: '5% 10%' }}>
         <div style={{ marginBottom: '2%' }}>
-          <h2 style={{ color: '#eba234' }}>Khóa học của tôi</h2>
+          <h2 style={{ color: '#eba234' }}>My Course</h2>
         </div>
         <Row xs={1} md={3} className="g-4">
-          {Array.from({ length: 7 }).map((_, idx) => (
-            <Col key={idx}>
+          {mycourses.map((mycourse, idx) => (
+            <Col key={mycourse.id}>
               <Card>
                 <Card.Img variant="top" src="holder.js/100px160" />
                 <Card.Body>
-                  <Card.Title>Card title</Card.Title>
+                  <Card.Title>({mycourse.courseCode})_{mycourse.instructorName}-{mycourse.msgv}</Card.Title>
                   <Card.Text>
-                    This is a longer card with supporting text below as a natural
-                    lead-in to additional content. This content is a little bit
-                    longer.
+                    (CQ_HK{mycourse.semester})_Số lượng {mycourse.credit}
                   </Card.Text>
                 </Card.Body>
               </Card>

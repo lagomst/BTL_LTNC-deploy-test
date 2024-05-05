@@ -16,18 +16,16 @@ function StudentHeader() {
     <>
       <Navbar expand="lg" style={{ borderBlockEnd: '1px solid' }}>
         <a href="/">
-          <img style={{ width: '15%' }} src={'https://i.ibb.co/CMwkBmw/lSgDz8N.png'} alt="logo" />
+          <img style={{ width: '30%' }} src={'https://i.ibb.co/CMwkBmw/lSgDz8N.png'} alt="logo" />
         </a>
         <Navbar.Collapse id="basic-navbar-nav" style={{ marginLeft: '5%' }}>
           <Nav className="me-auto">
-            <NavDropdown title="Các khóa học" id="basic-nav-dropdown" style={{ fontSize: '1.5em' }}>
-              <NavDropdown.Item href="/student/mycourse">My Course</NavDropdown.Item>
-            </NavDropdown>
+              <Nav.Link href="/student/mycourse" style={{ fontSize: '1.5em' }}>My Course</Nav.Link>
             <Nav.Link href="/student/courseRegistration" style={{ fontSize: '1.5em' }}>Course Registration</Nav.Link>
           </Nav>
         </Navbar.Collapse>
         <div>
-          <h4 style={{ marginTop: '0.5rem' }}>NGUYEN VAN A - SV{info.mssv}</h4>
+          <h4 style={{ marginTop: '0.5rem' }}>{info.name} - SV{info.mssv}</h4>
         </div>
         <Button style={{ marginLeft: '3%', color: 'black', backgroundColor: 'white', border: 'none' }}>
           <div style={{ marginLeft: '30%', marginRight: '30%', backgroundColor: 'blue', borderRadius: '50%' }}>

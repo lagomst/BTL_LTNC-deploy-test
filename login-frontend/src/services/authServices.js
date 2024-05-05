@@ -7,7 +7,6 @@ export const login = async (email, password) => {
     body: JSON.stringify({ email, password })
   });
   const data = await response.json();
-    console.log(response.status);
   if (response.ok) {
     sessionStorage.setItem('jwtToken', data.token); // Lưu token
     sessionStorage.setItem('userdata', JSON.stringify(data.userdata));

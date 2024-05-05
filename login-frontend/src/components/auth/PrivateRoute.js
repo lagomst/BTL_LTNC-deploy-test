@@ -14,7 +14,6 @@ const PrivateRoutes = () => {
     }
     else{
       const userdata = JSON.parse(info);
-      console.log('/' + userdata.role + '/dashboard');
       if(path[1] != userdata.role){
         navigate('/' + userdata.role + '/dashboard');
       }

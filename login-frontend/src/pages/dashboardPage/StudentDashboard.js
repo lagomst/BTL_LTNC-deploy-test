@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, {createContext, useState } from 'react';
 import StudentInfo from '../../components/dashboard/studentInfo';
-import Training from '../../components/dashboard/studentTraining';
 import Footer from '../../components/header_footer/Footer';
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import StudentHeader from '../../components/header_footer/StudentHeader';
 import './Dashboard.css';
+import EditStudent from '../../components/dashboard/editStudent';
 
+export const ViewContext = createContext();
 function DataTable() {
   const [currentView, setCurrentView] = useState('StudentInfo');
-
   const handleNavigation = (viewName) => {
     setCurrentView(viewName);
   };
@@ -21,8 +21,10 @@ function DataTable() {
         <div className="row">
           <div className="col-md-2 leftBody">
             <ul className="nav flex-column">
-              <li className="nav-item" style={{ marginTop: '2rem', cursor: 'pointer'  }}>
-                <i className="fas fa-regular fa-id-badge fa-md fa-2x"></i> Personal
+              <li className="nav-item" style={{ marginTop: '2rem', cursor: 'pointer' }}>
+                <a onClick={() => handleNavigation('StudentInfo')}>
+                    <i className="fa-regular fa-address-book fa-2x"></i> Personal
+                </a>
               </li>
               <li className="nav-item" style={{ marginTop: '2rem', cursor: 'pointer'}} onClick={() => setIsOpen(!isOpen)}>
                 <i className="fa fa-solid fa-book fa-md fa-2x"></i>  Study
@@ -46,25 +48,10 @@ function DataTable() {
 
           <div className="col-md-10 rightBody">
             <div className="dataTable mx-auto">
-              <div className="navigation">
-                <a
-                  onClick={() => handleNavigation('StudentInfo')}
-                  className={currentView === 'StudentInfo' ? 'active top_navbar' : ' top_navbar'}
-                >
-                  Student Information
-                </a>
-                <a
-                  onClick={() => handleNavigation('Training')}
-                  className={currentView === 'Training' ? 'active top_navbar' : ' top_navbar'}
-                >
-                  Training Information
-                </a>
-              </div>
-              <div style={{ padding: '10px' }}>
-                <i style={{ fontWeight: 'bold' }}>Last updated time: dd/mm/yyyy realtime</i>
-              </div>
-              {currentView === 'StudentInfo' && <StudentInfo />}
-              {currentView === 'Training' && <Training />}
+              <ViewContext.Provider value={{currentView, setCurrentView}} >
+                {currentView === 'StudentInfo' && <StudentInfo />}
+                {currentView === 'EditStudent' && <EditStudent />}
+              </ViewContext.Provider>
             </div>
           </div>
         </div>

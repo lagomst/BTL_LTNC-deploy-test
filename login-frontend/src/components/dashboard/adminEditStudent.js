@@ -1,13 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Table, Button, Modal, Form, Row, Col, Tab, ListGroup } from 'react-bootstrap';
 import { ViewContext } from '../../pages/dashboardPage/StudentDashboard';
-import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 function EditStudent() {
   const jwtToken = sessionStorage.getItem('jwtToken');
-  const {currentView, setCurrentView} = useContext(ViewContext);
-  const toggleSwitch = () => {
-    setCurrentView(currentView === 'StudentInfo' ? 'EditStudent' : 'StudentInfo');
-  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -39,8 +34,9 @@ function EditStudent() {
     }    
   });
   const getData = async () => {
+    const id = window.location.pathname.split('/')[4];
     try {
-      const response = await fetch("http://localhost:5000/student/dashboard/thongtinsinhvien", {
+      const response = await fetch(`http://localhost:5000/admin/dashboard/student/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${jwtToken}`, // Include the token in the request header
@@ -49,10 +45,10 @@ function EditStudent() {
       });
       if (response.status === 200) {
         const result = await response.json();
-        sessionStorage.setItem('userdata', JSON.stringify(result[0]));
+        sessionStorage.setItem('editData', JSON.stringify(result));
       }
       else {
-        console.error("Failed to get all student(s)");
+        console.error("Failed to get student(s)");
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -60,8 +56,9 @@ function EditStudent() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const id = window.location.pathname.split('/')[4];
     try {
-      const response = await fetch(`http://localhost:5000/student/dashboard/thongtinsinhvien`, {
+      const response = await fetch(`http://localhost:5000/admin/dashboard/student/${id}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${jwtToken}`,
@@ -82,12 +79,12 @@ function EditStudent() {
     }
   };
   useEffect(() => {
-    const userdata = sessionStorage.getItem('userdata');
-    if(userdata){
-      const retrivedata = JSON.parse(userdata);
+    const editData = sessionStorage.getItem('editData');
+    if(editData){
+      const retrivedata = JSON.parse(editData);
       setFormData({...formData, ...retrivedata});
     }
-  }, [])
+  }, [sessionStorage.getItem('editData')]);
   return (
     <Tab.Container defaultActiveKey={'#info'}>
       <ListGroup style={{ marginTop: '2%', flexDirection: 'row' }}>
@@ -101,7 +98,6 @@ function EditStudent() {
       
       <div style={{ padding: '10px' }}>
       <i style={{ fontWeight: 'bold' }}>Last updated time: dd/mm/yyyy realtime</i>
-      <Button onClick={toggleSwitch} style={{marginLeft :'100vh', marginRight: '1vh'}}>Edit</Button>
     </div>
       <Tab.Content>
         <Tab.Pane eventKey='#info' style={{ borderTop: 'none' }}>
@@ -123,10 +119,10 @@ function EditStudent() {
             </Col>
             <Col sm={3} style={{ paddingLeft: '1vh', borderLeft: '1px solid rgb(204, 203, 203)' }}>
               <label htmlFor="hovaten" className="form-label"><b>#Full Name</b></label>
-              <input type="text" className="form-control" id="hovaten" placeholder="Enter" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
+              <input type="text" className="form-control" id="hovaten" placeholder="Enter" aria-label="Họ & tên" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
 
               <label htmlFor="mssv" className="form-label"><b>#Student ID</b></label>
-              <input type="text" className="form-control" id="mssv" placeholder="Enter" value={formData.mssv}/>
+              <input type="text" className="form-control" id="mssv" value={formData.mssv} />
 
               <div style={{ marginBottom: '6px' }}>
                 <p style={{ fontWeight: 'bold' }}>#Sex</p>
@@ -147,28 +143,28 @@ function EditStudent() {
             </Col>
             <Col sm={3} style={{ paddingLeft: '1vh', borderLeft: '1px solid rgb(204, 203, 203)' }}>
               <label htmlFor="ngaysinh" className="form-label"><b>#Day of Births</b></label>
-              <input type="date" className="form-control" id="" placeholder="Enter" value={formData.private_info.birthday} 
+              <input type="date" className="form-control" id="ngaysinh" placeholder="Enter" value={formData.private_info.birthday} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, birthday: e.target.value}} )} />
 
               <label htmlFor="malop" className="form-label"><b>#Class</b></label>
-              <input type="text" className="form-control" id="" placeholder="Enter" value={formData.private_info.classId} 
+              <input type="text" className="form-control" id="malop" placeholder="Enter" value={formData.private_info.classId} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, classId: e.target.value}} )} />
 
               <label htmlFor="khoa" className="form-label"><b>#Faculty</b></label>
-              <input type="text" className="form-control" id="" placeholder="Enter"  value={formData.private_info.faculty} 
+              <input type="text" className="form-control" id="khoa" placeholder="Enter" value={formData.private_info.faculty} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, faculty: e.target.value}} )} />
             </Col>
             <Col sm={3} style={{ paddingLeft: '1vh', borderLeft: '1px solid rgb(204, 203, 203)' }}>
               <label htmlFor="cccd" className="form-label"><b>#Identity Card Number</b></label>
-              <input type="text" className="form-control" id="" placeholder="Enter" value={formData.private_info.cccd} 
+              <input type="text" className="form-control" id="cccd" placeholder="Enter" value={formData.private_info.cccd} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, cccd: e.target.value}} )} />
 
               <label htmlFor="ngaycapcccd" className="form-label"><b>#Date of issue of identity card</b></label>
-              <input type="date" className="form-control" id="" placeholder="Enter" value={formData.private_info.cccdDay} 
+              <input type="date" className="form-control" id="ngaycapcccd" placeholder="Enter" value={formData.private_info.cccdDay} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, cccdDay: e.target.value}} )} />
               
               <label htmlFor="noicapcccd" className="form-label"><b>#Place of issue of identity card</b></label>
-              <input type="text" className="form-control" id="" placeholder="Enter" value={formData.private_info.cccdLocation} 
+              <input type="text" className="form-control" id="noicapcccd" placeholder="Enter" value={formData.private_info.cccdLocation} 
                 onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, cccdLocation: e.target.value}} )} />
             </Col>
           </Row>
@@ -181,7 +177,7 @@ function EditStudent() {
             <Col sm={3}>
               <div style={{ paddingLeft: '1vh' }}>
                 <label htmlFor="diachi" className="form-label"><b>#Address</b></label>
-                <input type="text" className="form-control" id="diachi" placeholder="Enter"  value={formData.private_info.address} 
+                <input type="text" className="form-control" id="diachi" placeholder="Enter" value={formData.private_info.address} 
                   onChange={(e) => setFormData({...formData, private_info: {...formData.private_info, address: e.target.value}} )} />
               </div>
             </Col>

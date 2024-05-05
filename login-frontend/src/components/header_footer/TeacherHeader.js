@@ -17,11 +17,11 @@ function TeacherHeader() {
         </a>
         <ul className="navbar-nav ms-auto">
           <li style={{padding: '2vh'}}>
-            <p>Nguyen Van A - GV{info.msgv}</p>
+            <p>{info.name} - GV{info.msgv}</p>
           </li>
           <li style={{padding: '2vh', cursor: 'pointer'}} onClick={LogOut}>
             <i className="fa fa-solid fa-bell fa-lg fa-3x"></i>
-            Logout
+            LogOut
           </li>
         </ul>
       </nav>
