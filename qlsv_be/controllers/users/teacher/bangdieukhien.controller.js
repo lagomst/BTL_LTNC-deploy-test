@@ -33,7 +33,7 @@ module.exports.dashboard = async (req, res) => {
     if (!cou) {
       return res.status(404).send("Cannot find courses with msgv = " + msgv);
     }
-    res.send(cou)
+    res.send(cou);
   } catch (error) {
     // Xử lý lỗi khi có lỗi xảy ra
     res.send("Xin lỗi! Đây là dòng tin nhắn thất bại của bangdieukhien.");

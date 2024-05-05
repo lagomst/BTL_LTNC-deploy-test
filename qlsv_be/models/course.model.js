@@ -12,9 +12,7 @@ const courseSchema = new mongoose.Schema({
     scheduleWeek: {type: [Number],required: false },
     tinhchihocphi:{type: Number, required: false },
     STT:{type: Number, required: false },
-    classroom: {
-        type: String
-    },
+    classroom: { type: String, required: false },
     midterm:{
         examDay: {type: String,required: false },
         examTime: {type: String,required: false },

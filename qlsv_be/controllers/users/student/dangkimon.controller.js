@@ -22,7 +22,7 @@ const viewCourseReg = async (req, res) => {
   const {mssv} = req.user
   try {
     const stu = await student.findOne({"mssv": mssv});
-    const courseRet = student.courseReg
+    const courseRet = stu.courseReg
     if (!courseRet) {
       return res.status(404).send();
     }

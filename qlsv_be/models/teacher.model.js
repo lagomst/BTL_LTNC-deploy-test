@@ -19,19 +19,18 @@ const teacherSchema = new mongoose.Schema({
     },
     image: { type: String, required: false },
     private_info: {
-        ngaySinh: Date, 
-        gioiTinh: String,
-        soCCCD: Number,
-        ngaycapCCCD: Date,
-        noicapCCCD: String,
-        bangcap: String,
-    },
-    contact_info: {
-        diachi: String, 
-        sodienthoai: Number,
-        emailtruongcap: String,
-        emaillienlac: String 
-    },
+        birthday: Date,
+        gender: { type: String, enum: ['M', 'F'] },
+        degree: String,
+        cccd: String,
+        cccdDay: Date,
+        cccdLocation: String,
+        faculty: String,
+        address: String,
+        phoneNumber: String,
+        email: String,
+        personalEmail: String,
+    }
 });
 
 const teacherModel = mongoose.model('teacher', teacherSchema);

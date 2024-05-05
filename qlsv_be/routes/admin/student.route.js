@@ -2,26 +2,23 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path'); //Upload image
-const {CloudinaryStorage} = require('multer-storage-cloudinary')
-const cloudinary = require('../../configs/cloudinary')
+
 const studentController = require('../../controllers/admin/student.controller');
 
-
 //define multer
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    folder: 'images',
-    allowedFormats: ['jpg', 'png', 'jpeg'],
-    
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+      cb(null, 'uploads/')  // Store files in the 'uploads' folder
+    },
+    filename: function(req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))  // Create a unique file name
+    }
 });
 
 const upload = multer({ storage: storage });
 
 // Route to update a student's information and handle image upload
-router.post('/upload/:mssv', upload.fields([{name: 'img', maxCount: 1}]), (req, res) => {
-  const link_img = req.files['img'][0];
-  res.send(link_img);
-});
+router.post('/upload/:mssv', upload.single('image'), studentController.updateStudent);
 
 router.get('/', studentController.getAllStudents);
 router.post('/add', studentController.addStudent);

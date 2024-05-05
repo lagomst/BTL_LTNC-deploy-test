@@ -44,7 +44,7 @@ module.exports.updateTeacher = async (req, res) => {
         if (!tea) {
             return res.status(404).send();
         }
-        res.json(tea);
+        res.send(tea);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

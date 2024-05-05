@@ -72,7 +72,7 @@ const updateTeacher = async (req, res) => {
             return res.status(404).send();
         }
 
-        res.json(teacher);
+        res.send(teacher);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
